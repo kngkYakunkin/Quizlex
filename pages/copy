@@ -1,0 +1,75 @@
+package pages
+
+import (
+	"fmt"
+	"quizlex/layouts"
+	"quizlex/widgets"
+
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/widget"
+)
+
+func ModuleCreatingPage(window fyne.Window) {
+
+	var page_title string = "Create Module"
+	// Width percent for the screen
+
+	window.SetTitle(page_title)
+
+	// Define center position for the content
+
+	var window_content *fyne.Container
+	var terms []fyne.CanvasObject
+
+	var array []int
+
+	array = append(array, 111)
+	array = append(array, 222)
+	array = append(array, 333)
+	array = append(array, 444)
+	widgets.H(&array)
+	fmt.Println(array)
+
+	termEntry := widget.NewEntry()
+
+	defEntry := widgets.NewDefEntry(window, &terms, s(window, terms))
+	//ss := layouts.NewAdaptiveGridWithRatios([]float32{0.1, 0.4, 0.4, 0.1}, layout.NewSpacer(), termEntry, defEntry, layout.NewSpacer())
+
+	terms = append(terms, container.NewVBox(layouts.NewAdaptiveGridWithRatios([]float32{0.1, 0.4, 0.4, 0.1}, layout.NewSpacer(), termEntry, defEntry, layout.NewSpacer())))
+
+	window_content = s(window, terms)
+
+	window.SetContent(window_content)
+
+}
+
+func s(window fyne.Window, terms []fyne.CanvasObject) *fyne.Container {
+
+	var content_width float32 = 0.8
+
+	module_name_input := widget.NewEntry()
+	center_pos := []float32{(1 - content_width) / 2, content_width, (1 - content_width) / 2}
+
+	back_button := widget.NewButtonWithIcon("Главная", theme.HomeIcon(), func() {
+
+	})
+
+	return container.NewVBox(
+		// Back button
+		layouts.NewAdaptiveGridWithRatios([]float32{0.1}, back_button),
+		// Name input
+		layouts.NewAdaptiveGridWithRatios([]float32{0.1, 0.4}, layout.NewSpacer(), widget.NewLabel("Module Name")),
+		// Labels
+		layouts.NewAdaptiveGridWithRatios(center_pos, layout.NewSpacer(), module_name_input, layout.NewSpacer()),
+		// Words entries
+		container.NewVBox(terms...),
+	)
+}
+
+func change(window fyne.Window, terms []fyne.CanvasObject) {
+	terms = append(terms, container.NewVBox(layouts.NewAdaptiveGridWithRatios([]float32{0.1, 0.4, 0.4, 0.1}, layout.NewSpacer(), widget.NewEntry(), widget.NewEntry(), layout.NewSpacer())))
+	window.SetContent(s(window, terms))
+}
